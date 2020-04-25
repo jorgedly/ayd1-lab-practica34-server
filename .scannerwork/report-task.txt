@@ -1,0 +1,6 @@
+projectKey=ayd1_lab_practica34_server
+serverUrl=http://localhost:9000
+serverVersion=8.2.0.32929
+dashboardUrl=http://localhost:9000/dashboard?id=ayd1_lab_practica34_server
+ceTaskId=AXGzlWE34yF7Dk939Z-w
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXGzlWE34yF7Dk939Z-w
