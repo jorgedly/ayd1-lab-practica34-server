@@ -4,12 +4,14 @@ const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const conn = require('./conexion');
+const cambioRoutes = require('./routes/cambio');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+app.use('/cambio', cambioRoutes);
 
 app.get('/getUsers', (req, res) => {
     let sql = `SELECT * FROM usuario`;
@@ -24,11 +26,17 @@ app.get('/getUsers', (req, res) => {
 
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    let sql = `SELECT 1 FROM Usuario WHERE email='${email}' AND password='${password}'`;
+    let sql = `SELECT nombres,apellidos,no_cuenta FROM Usuario WHERE email='${email}' AND password='${password}'`;
     let query = conn.query(sql, (err, results) => {
         if (err) throw err;
         if (results.length === 1) {
-            res.send({ auth: true });
+            console.log(results[0]);
+            res.send({
+                auth: true,
+                nombres: results[0].nombres,
+                apellidos: results[0].apellidos,
+                no_cuenta: results[0].no_cuenta
+            });
         } else {
             res.send({ auth: false });
         }
