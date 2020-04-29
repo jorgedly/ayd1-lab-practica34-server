@@ -48,4 +48,30 @@ app.post('/register', (req, res) => {
     });
 });
 
+app.post('/getMovimientos', (req, res) => {
+    const { no_cuenta } = req.body;
+    let sql = `SELECT * FROM Usuario WHERE no_cuenta='${no_cuenta}'`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) throw err;
+        if (results.length === 1) {
+            res.send({ auth: true });
+        } else {
+            res.send({ auth: false });
+        }
+    });
+});
+
+app.post('/getSaldo', (req, res) => {
+    const { noCuenta } = req.body;
+    let sql = `SELECT * FROM Usuario WHERE cuenta_origen='${noCuenta}' OR cuenta_origen='${noCuenta}'`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) throw err;
+        if (results.length === 1) {
+            res.send({ auth: true });
+        } else {
+            res.send({ auth: false });
+        }
+    });
+});
+
 app.listen(port, () => console.log(`Escuchando en puerto ${port}...`))
