@@ -61,12 +61,26 @@ app.post('/getMovimientos', (req, res) => {
     });
 });
 
+app.post('/getUser', (req, res) => {
+    const { email, password } = req.body;
+    let sql = `SELECT * FROM Usuario WHERE email='${email}' AND password='${password}'`;
+    //const { no_cuenta } = req.body;
+    //let sql = `SELECT * FROM usuario WHERE no_cuenta='${no_cuenta}'`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send(-1);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
 app.post('/getSaldos', (req, res) => {
     const { no_cuenta } = req.body;
     let sql = `SELECT * FROM usuario WHERE no_cuenta='${no_cuenta}'`;
     let query = conn.query(sql, (err, results) => {
         if (err) {
-            res.send([]);
+            res.send(-1);
         } else {
             res.send(results);
         }
@@ -78,7 +92,7 @@ app.post('/getSaldoDeb', (req, res) => {
     let sql = `SELECT * FROM transaccion WHERE cuenta_origen='${cuenta_origen}'`;
     let query = conn.query(sql, (err, results) => {
         if (err) {
-            res.send([]);
+            res.send(-1);
         } else {
             res.send(results);
         }
@@ -91,7 +105,7 @@ app.post('/getSaldoCre', (req, res) => {
     let sql = `SELECT * FROM transaccion WHERE cuenta_destino='${cuenta_destino}'`;
     let query = conn.query(sql, (err, results) => {
         if (err) {
-            res.send([]);
+            res.send(-1);
         } else {
             res.send(results);
         }
