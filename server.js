@@ -74,4 +74,34 @@ app.post('/getSaldo', (req, res) => {
     });
 });
 
+app.post('/transferMoney',(req, res) => {
+    const {cuenta1, cuenta2, monto} = req.body;
+    let sql = `INSERT INTO transaccion (cuenta_origen, cuenta_destino, monto) VALUES (${cuenta1},${cuenta2},${monto})`
+    let query = conn.query(sql, (err, results) => {
+        if (err) 
+            res.send({ 'success': false });
+        else {
+            console.log(results);
+            let sql2 = `UPDATE Usuario SET saldo = saldo - ${monto} WHERE no_cuenta = ${cuenta1}`;
+            let query2 = conn.query(sql2, (err, results) => {
+                if (err) 
+                    res.send({ 'success': false });
+                else{
+                    let sql3 = `UPDATE usuario SET saldo = saldo + ${monto} WHERE no_cuenta = ${cuenta2}`;
+                    let query3 = conn.query(sql3, (err, results) => {
+                        if (err){
+                            console.log(err)
+                            res.send({'success': false})
+                        }
+                        else{
+                            console.log(results);
+                            res.send({'success':true})
+                        }
+                    });
+                } 
+            });
+        }
+    });
+})
+
 app.listen(port, () => console.log(`Escuchando en puerto ${port}...`))
