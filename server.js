@@ -61,15 +61,39 @@ app.post('/getMovimientos', (req, res) => {
     });
 });
 
-app.post('/getSaldo', (req, res) => {
-    const { noCuenta } = req.body;
-    let sql = `SELECT * FROM Usuario WHERE cuenta_origen='${noCuenta}' OR cuenta_origen='${noCuenta}'`;
+app.post('/getSaldos', (req, res) => {
+    const { no_cuenta } = req.body;
+    let sql = `SELECT * FROM usuario WHERE no_cuenta='${no_cuenta}'`;
     let query = conn.query(sql, (err, results) => {
-        if (err) throw err;
-        if (results.length === 1) {
-            res.send({ auth: true });
+        if (err) {
+            res.send([]);
         } else {
-            res.send({ auth: false });
+            res.send(results);
+        }
+    });
+});
+
+app.post('/getSaldoDeb', (req, res) => {
+    const { cuenta_origen } = req.body;
+    let sql = `SELECT * FROM transaccion WHERE cuenta_origen='${cuenta_origen}'`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send([]);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
+
+app.post('/getSaldoCre', (req, res) => {
+    const { cuenta_destino } = req.body;
+    let sql = `SELECT * FROM transaccion WHERE cuenta_destino='${cuenta_destino}'`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send([]);
+        } else {
+            res.send(results);
         }
     });
 });
