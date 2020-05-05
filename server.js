@@ -150,4 +150,16 @@ app.post('/transferMoney',(req, res) => {
     });
 })
 
+app.post('/getDatos', (req, res) => {
+    const { no_cuenta } = req.body;
+    let sql = `SELECT * FROM usuario WHERE no_cuenta='${no_cuenta}'`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send(-1);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
 app.listen(port, () => console.log(`Escuchando en puerto ${port}...`))
