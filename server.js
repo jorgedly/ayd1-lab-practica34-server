@@ -162,4 +162,18 @@ app.post('/getDatos', (req, res) => {
     });
 });
 
+app.put('/modificarPerfil', (req,res) => {
+    const { no_cuenta, email, password } = req.body;
+
+    let sql = `UPDATE usuario SET email = '${email}', password = '${password}' WHERE no_cuenta=${no_cuenta}`;
+    console.log(sql);
+    let query = conn.query(sql, (err,result) => {
+        if(err){
+            res.send({'success': false});
+        } else{
+            res.send({'success': true});
+        }
+    });
+})
+
 app.listen(port, () => console.log(`Escuchando en puerto ${port}...`))
