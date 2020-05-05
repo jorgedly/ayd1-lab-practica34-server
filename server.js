@@ -174,4 +174,30 @@ app.post('/transferMoney',(req, res) => {
     });
 })
 
+app.post('/getDatos', (req, res) => {
+    const { no_cuenta } = req.body;
+    let sql = `SELECT * FROM usuario WHERE no_cuenta='${no_cuenta}'`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send(-1);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
+app.put('/modificarPerfil', (req,res) => {
+    const { no_cuenta, email, password } = req.body;
+
+    let sql = `UPDATE usuario SET email = '${email}', password = '${password}' WHERE no_cuenta=${no_cuenta}`;
+    console.log(sql);
+    let query = conn.query(sql, (err,result) => {
+        if(err){
+            res.send({'success': false});
+        } else{
+            res.send({'success': true});
+        }
+    });
+})
+
 app.listen(port, () => console.log(`Escuchando en puerto ${port}...`))
