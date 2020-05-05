@@ -13,8 +13,32 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use('/cambio', cambioRoutes);
 
+
 app.get('/getUsers', (req, res) => {
     let sql = `SELECT * FROM usuario`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send([]);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
+app.get('/reporte/general', (req, res) => {
+    let sql = `SELECT * FROM transaccion`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send([]);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
+app.get('/reporte/general/:id', (req, res) => {
+    const id = req.params.id;
+    let sql = `SELECT * FROM transaccion where cuenta_origen = ${id}`;
     let query = conn.query(sql, (err, results) => {
         if (err) {
             res.send([]);
