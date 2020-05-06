@@ -13,8 +13,32 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use('/cambio', cambioRoutes);
 
+
 app.get('/getUsers', (req, res) => {
     let sql = `SELECT * FROM usuario`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send([]);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
+app.get('/reporte/general', (req, res) => {
+    let sql = `SELECT * FROM transaccion`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send([]);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
+app.get('/reporte/general/:id', (req, res) => {
+    const id = req.params.id;
+    let sql = `SELECT * FROM transaccion where cuenta_origen = ${id}`;
     let query = conn.query(sql, (err, results) => {
         if (err) {
             res.send([]);
@@ -146,6 +170,32 @@ app.post('/transferMoney',(req, res) => {
                     });
                 } 
             });
+        }
+    });
+})
+
+app.post('/getDatos', (req, res) => {
+    const { no_cuenta } = req.body;
+    let sql = `SELECT * FROM usuario WHERE no_cuenta='${no_cuenta}'`;
+    let query = conn.query(sql, (err, results) => {
+        if (err) {
+            res.send(-1);
+        } else {
+            res.send(results);
+        }
+    });
+});
+
+app.put('/modificarPerfil', (req,res) => {
+    const { no_cuenta, email, password } = req.body;
+
+    let sql = `UPDATE usuario SET email = '${email}', password = '${password}' WHERE no_cuenta=${no_cuenta}`;
+    console.log(sql);
+    let query = conn.query(sql, (err,result) => {
+        if(err){
+            res.send({'success': false});
+        } else{
+            res.send({'success': true});
         }
     });
 })
